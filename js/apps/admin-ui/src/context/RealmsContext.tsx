@@ -6,9 +6,16 @@ import { keycloak } from "../keycloak";
 import { useFetch } from "../utils/useFetch";
 import { fetchAdminUI } from "./auth/admin-ui-endpoint";
 
+interface AvailableRealm  {
+    reamId: string;
+    displayName: string;
+}
+
 type RealmsContextProps = {
   /** A list of all the realms. */
   realms: string[];
+  /** Map from realmId to displayName */
+  realmDisplayNames: { [key: string]: string };
   /** Refreshes the realms with the latest information. */
   refresh: () => Promise<void>;
 };
@@ -18,19 +25,20 @@ export const RealmsContext = createNamedContext<RealmsContextProps | undefined>(
   undefined,
 );
 
-interface AvailableRealm  {
-    reamId: string;
-    displayName: string;
-}
-
-
 export const RealmsProvider = ({ children }: PropsWithChildren) => {
   const [realms, setRealms] = useState<string[]>([]);
+  const [realmDisplayNames, setRealmDisplayNames] = useState<{ [key: string]: string }>({});
   const [refreshCount, setRefreshCount] = useState(0);
 
   function updateRealms(realms: AvailableRealm[]) {
-    console.log(realms)
-    setRealms(realms);
+    setRealms(realms.map((realm) => realm.realmId));
+    setRealmDisplayNames(realms.reduce(
+                                  (acc, realm) => {
+                                    acc[realm.realmId] = realm.displayName;
+                                    return acc;
+                                  },
+                                  {}
+                                ));
   }
 
   useFetch(

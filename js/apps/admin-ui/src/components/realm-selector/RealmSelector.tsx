@@ -80,7 +80,7 @@ const ContextSelectorItemLink = ({
 
 export const RealmSelector = () => {
   const { realm } = useRealm();
-  const { realms, refresh } = useRealms();
+  const { realms, refresh, realmDisplayNames } = useRealms();
   const { whoAmI } = useWhoAmI();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -163,6 +163,7 @@ export const RealmSelector = () => {
         ? realms.map((name) => (
             <DropdownItem
               key={name}
+              description={realmDisplayNames[name]}
               component={
                 <Link
                   to={toDashboard({ realm: name })}
