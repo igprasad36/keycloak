@@ -18,11 +18,17 @@ export const RealmsContext = createNamedContext<RealmsContextProps | undefined>(
   undefined,
 );
 
+interface AvailableRealm  {
+    reamId: string;
+    displayName: string;
+}
+
+
 export const RealmsProvider = ({ children }: PropsWithChildren) => {
   const [realms, setRealms] = useState<string[]>([]);
   const [refreshCount, setRefreshCount] = useState(0);
 
-  function updateRealms(realms: string[]) {
+  function updateRealms(realms: AvailableRealm[]) {
     console.log(realms)
     setRealms(realms);
   }
@@ -35,7 +41,7 @@ export const RealmsProvider = ({ children }: PropsWithChildren) => {
       }
 
       try {
-        return await fetchAdminUI<string[]>("ui-ext/realms", {});
+        return await fetchAdminUI<AvailableRealm[]>("ui-ext/realms", {});
       } catch (error) {
         if (error instanceof NetworkError && error.response.status < 500) {
           return [];
