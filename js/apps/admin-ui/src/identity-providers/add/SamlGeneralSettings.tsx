@@ -33,6 +33,8 @@ export const SamlGeneralSettings = ({
 
   const alias = watch("alias");
 
+  console.log("Changed");
+
   return (
     <>
       <RedirectUrl id={id} />

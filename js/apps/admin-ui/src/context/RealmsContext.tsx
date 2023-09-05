@@ -23,7 +23,8 @@ export const RealmsProvider = ({ children }: PropsWithChildren) => {
   const [refreshCount, setRefreshCount] = useState(0);
 
   function updateRealms(realms: string[]) {
-    setRealms(realms.sort());
+    console.log(realms)
+    setRealms(realms);
   }
 
   useFetch(

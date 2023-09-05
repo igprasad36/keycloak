@@ -12,6 +12,7 @@ import org.jboss.resteasy.annotations.cache.NoCache;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.services.ForbiddenException;
+import org.keycloak.admin.ui.rest.model.AvailableRealm;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -37,13 +38,13 @@ public class RealmResource {
             description = "",
             content = {@Content(
                     schema = @Schema(
-                            implementation = String.class,
+                            implementation = AvailableRealm.class,
                             type = SchemaType.ARRAY
                     )
             )}
     )
-    public Stream<String> realmList() {
-        Stream<String> realms = session.realms().getRealmsStream().filter(Objects::nonNull).map(RealmModel::getName);
+    public Stream<AvailableRealm> realmList() {
+        Stream<AvailableRealm> realms = session.realms().getRealmsStream().filter(Objects::nonNull).map(realm -> new AvailableRealm(realm.getName(), realm.getDisplayName()));
         return throwIfEmpty(realms, new ForbiddenException());
     }
 }
